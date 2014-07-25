@@ -47,8 +47,9 @@ module WashOutHelper
         xml.tag! "xsd:complexType", :name => param.basic_type do
           xml.tag! "xsd:sequence" do
             param.map.each do |value|
+              puts more
               more << value if value.struct?
-              puts wsdl_occurence(value, false, :name => value.name, :type => value.namespaced_type)
+              # puts wsdl_occurence(value, false, :name => value.name, :type => value.namespaced_type)
               xml.tag! "xsd:element", wsdl_occurence(value, false, :name => value.name, :type => value.namespaced_type)
             end
           end
@@ -66,7 +67,7 @@ module WashOutHelper
   end
 
   def wsdl_occurence(param, inject, extend_with = {})
-    data = param.multiplied ? {} : {
+    data = !param.multiplied ? {} : {
       "#{'xsi:' if inject}minOccurs" => 0,
       "#{'xsi:' if inject}maxOccurs" => 'unbounded'
     }
